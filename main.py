@@ -28,6 +28,16 @@ class Person():
 
             return person_element
 
+def create_file(end):
+    filename = input(f'Введите название файла(с расширением {end}): ')
+
+    while filename in os.listdir() or '\\' in filename or '/' in filename or not filename.endswith(f'{end}'):
+          filename = input('Название файла неккоректно, введите другое: ')
+    return filename
+
+def delete_file(filename):
+    if input(f'Удалить файл {filename}?(y/n): ') == 'y':
+          os.remove(filename)
 
 # Первое задание
 def first_tsk(partition):
@@ -50,10 +60,7 @@ def first_tsk(partition):
 
 # Второе задание
 def second_tsk():
-    filename = input('Введите название файла: ')
-
-    while filename in os.listdir() or '\\' in filename or '/' in filename:
-          filename = input('Название файла неккоректно, введите другое: ')
+    filename = create_file('.txt')
 
     user_string = input('Введите строку: ')
 
@@ -71,16 +78,11 @@ def second_tsk():
     with open(f'{filename}', 'r') as f:
          print(f.read())
 
-    if input('Удалить файл?(y/n): ') == 'y':
-        os.remove(filename)
+    delete_file(filename)
 
 # Третье Задание
 def third_tsk():
-    filename = input('Введите название файла(с расширением .json): ')
-
-    while filename in os.listdir() or '\\' in filename or '/' in filename or not filename.endswith('json'):
-        print('Название файла неккоректно')
-        filename = input('Введите название файла(с расширением .json): ')
+    filename = create_file('.json')
 
     obj1 = Person()
 
@@ -98,17 +100,12 @@ def third_tsk():
 
     loaded_person.printer()
 
-    if input('Удалить файл?(y/n): ') == 'y':
-        os.remove(filename)
+    delete_file(filename)
 
 
 # Четвертое задание
 def fourth_tsk():
-    filename = input('Введите название файла(с расширением .xml): ')
-
-    while filename in os.listdir() or '\\' in filename or '/' in filename or not filename.endswith('xml'):
-        print('Название файла неккоректно')
-        filename = input('Введите название файла(с расширением .xml): ')
+    filename = create_file('.xml')
 
     obj1 = Person()
 
@@ -117,12 +114,12 @@ def fourth_tsk():
     tree = ET.ElementTree(person_element)
     
     tree.write(filename, pretty_print=True, xml_declaration=True)
+
     print('В XML записано')
     with open(filename, 'r') as f:
         print(f.read())
 
-    if input('Удалить файл?(y/n): ') == 'y':
-        os.remove(filename)
+    delete_file(filename)
 
 
 # Пятое задание
@@ -137,10 +134,7 @@ def fifth_tsk():
         file_path = filedialog.askopenfilename(title="Выберите файл для архивации", filetypes=[("Все файлы", "*.*")])
 
     # Запрашиваем имя архива
-    archive_name = input("Введите имя архива (с расширением .zip): ")
-    while archive_name in os.listdir() or '\\' in archive_name or '/' in archive_name or not archive_name.endswith('.zip'):
-        print('Имя архива неккоректно')
-        archive_name = input('Введите название файла(с расширением .xml): ')
+    archive_name = create_file('.zip')
 
     try:
         # Создаем ZIP-архив и добавляем выбранный файл в архив
@@ -155,11 +149,12 @@ def fifth_tsk():
     with zipfile.ZipFile(archive_name, 'r') as zip_ref:
         zip_ref.extractall()
 
+    print(f"Файл '{zip_ref.namelist()[0]}' успешно разархивирован из '{archive_name}'.")
+
     print('Метаданные о файле: ', os.stat(zip_ref.namelist()[0]))
 
-    if input('Удалить файлы?(y/n): ') == 'y':
-        os.remove(archive_name)
-        os.remove(zip_ref.namelist()[0])
+    delete_file(archive_name)
+    delete_file(zip_ref.namelist()[0])
 
 def main():
 
